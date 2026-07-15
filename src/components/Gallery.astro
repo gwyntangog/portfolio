@@ -1,31 +1,16 @@
 ---
 // Gallery.astro
-// A "coverflow" style carousel: the current image is large and centered,
-// with neighboring images shown smaller on either side
-// (…small, medium, CURRENT, medium, small…).
-// Click any thumbnail to bring it to the center.
-//
-// Usage:
-// ---
-// import Gallery from '../components/Gallery.astro';
-// const images = [
-//   { src: '/images/project-1.jpg', alt: 'Project One hero shot', caption: 'Project One' },
-//   { src: '/images/project-2.jpg', alt: 'Project Two detail view' },
-// ];
-// ---
-// <Gallery images={images} />
 
 export interface GalleryImage {
-  src: string;
+  src?: string;       // required for images, omit for videos
+  video?: string;     // any YouTube URL, or a bare video ID
   alt: string;
   caption?: string;
 }
 
 interface Props {
   images: GalleryImage[];
-  /** Unique id, useful if you render more than one Gallery on a page. */
   id?: string;
-  /** Which image starts centered (0-indexed). */
   startIndex?: number;
 }
 
@@ -34,9 +19,29 @@ const {
   id = `gallery-${Math.random().toString(36).slice(2, 9)}`,
   startIndex = 0,
 } = Astro.props;
+
+function getYouTubeId(url: string): string {
+  const shorts = url.match(/\/shorts\/([^?&/]+)/);  // ← add this first
+  if (shorts) return shorts[1];
+
+  const short = url.match(/youtu\.be\/([^?&/]+)/);
+  if (short) return short[1];
+
+  const watch = url.match(/[?&]v=([^&]+)/);
+  if (watch) return watch[1];
+
+  const embed = url.match(/\/embed\/([^?&/]+)/);
+  if (embed) return embed[1];
+
+  return url;
+}
+
+function getVideoRatio(url: string): string {
+  return url.includes('/shorts/') ? '9 / 16' : '16 / 9';
+}
 ---
 
-<div class="carousel" id={id} data-start={startIndex+2}>
+<div class="carousel" id={id} data-start={startIndex}>
 
   <div class="carousel-track">
     {images.map((image, i) => (
@@ -44,28 +49,42 @@ const {
         class="carousel-item"
         type="button"
         data-index={i}
+        data-type={image.video ? 'video' : 'image'}
+        data-video-ratio={image.video ? getVideoRatio(image.video) : undefined}
         aria-label={image.caption ?? image.alt}
       >
-        <img src={image.src} alt={image.alt} loading={i === startIndex ? 'eager' : 'lazy'} decoding="async" />
+        {image.video ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${getYouTubeId(image.video)}?enablejsapi=1&rel=0`}
+            title={image.caption ?? image.alt}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          />
+        ) : (
+          <img
+            src={image.src}
+            alt={image.alt}
+            loading={i === startIndex ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        )}
       </button>
     ))}
-
   </div>
 
   <p class="carousel-caption"></p>
 
-  <div class ="button-container">
-  <button class="carousel-btn prev" type="button" aria-label="Previous image">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
-
-  <button class="carousel-btn next" type="button" aria-label="Next image" >
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
+  <div class="button-container">
+    <button class="carousel-btn prev" type="button" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="carousel-btn next" type="button" aria-label="Next image">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
   </div>
 
 </div>
@@ -75,6 +94,7 @@ const {
     display: flex;
     gap: 30px;
   }
+
   .carousel {
     display: flex;
     flex-direction: column;
@@ -95,7 +115,7 @@ const {
   }
 
   .carousel-item {
-    position: relative;
+    position: absolute;   /* hidden by default */
     flex: 0 0 auto;
     border: none;
     padding: 0;
@@ -105,16 +125,14 @@ const {
     overflow: hidden;
     cursor: pointer;
     height: 55%;
-    aspect-ratio: 4 / 3;
     opacity: 0;
     transform: scale(0.8);
     filter: brightness(0.6);
-    transition: height 0.35s ease, opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
-
-    /* Hidden by default; JS assigns one of the classes below to reveal. */
-    position: absolute;
+    transition: height 0.35s ease, opacity 0.35s ease,
+                transform 0.35s ease, filter 0.35s ease;
   }
 
+  /* --- img fills its button -------------------------------------------- */
   .carousel-item img {
     width: 100%;
     height: 100%;
@@ -122,10 +140,28 @@ const {
     display: block;
   }
 
-  /* Distance-from-center states, applied by the client script */
+  /* --- iframe fills its button ------------------------------------------ */
+  .carousel-item iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    /*
+      Non-current: forward clicks through to the <button> so the user
+      can click any off-center video to bring it to the front.
+    */
+    pointer-events: none;
+  }
+
+  .carousel-item.is-current iframe {
+    pointer-events: auto;   /* current: interact with the YouTube player */
+  }
+
+  /* --- distance-from-center states ------------------------------------- */
   .carousel-item.is-current {
     position: relative;
     height: 100%;
+    max-width: 80%;
     opacity: 1;
     transform: scale(1);
     filter: brightness(1);
@@ -136,6 +172,7 @@ const {
   .carousel-item.is-medium {
     position: relative;
     height: 72%;
+    max-width: 35%;
     opacity: 0.85;
     transform: scale(1);
     filter: brightness(0.75);
@@ -145,6 +182,7 @@ const {
   .carousel-item.is-small {
     position: relative;
     height: 50%;
+    max-width: 25%;
     opacity: 0.6;
     transform: scale(1);
     filter: brightness(0.55);
@@ -157,7 +195,7 @@ const {
 
   .carousel-btn {
     flex: 0 0 auto;
-    display: inline-block;
+    display: inline-flex;
     place-items: center;
     width: 40px;
     height: 40px;
@@ -169,19 +207,8 @@ const {
     transition: background 0.2s ease, transform 0.15s ease;
   }
 
-  .carousel-btn:hover {
-    background: #ddd;
-  }
-
-  .carousel-btn:active {
-    transform: scale(0.92);
-  }
-
-  .carousel-controls {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+  .carousel-btn:hover  { background: #ddd; }
+  .carousel-btn:active { transform: scale(0.92); }
 
   .carousel-caption {
     margin: 0;
@@ -192,50 +219,75 @@ const {
   }
 
   @media (max-width: 480px) {
-    .carousel-btn {
-      width: 34px;
-      height: 34px;
-    }
+    .carousel-btn { width: 34px; height: 34px; }
   }
 </style>
 
 <script>
-  interface GalleryImage {
-    caption?: string;
-  }
-
   class Carousel {
     root: HTMLElement;
     items: HTMLElement[];
     captionEl: HTMLElement;
     index: number;
 
-    // How many neighbors on each side get "medium" treatment before
-    // falling back to "small". Anything beyond VISIBLE_RANGE is hidden.
-    static MEDIUM_RANGE = 1;
+    static MEDIUM_RANGE  = 1;
     static VISIBLE_RANGE = 2;
 
     constructor(root: HTMLElement) {
-      this.root = root;
-      this.items = Array.from(root.querySelectorAll('.carousel-item'));
+      this.root      = root;
+      this.items     = Array.from(root.querySelectorAll('.carousel-item'));
       this.captionEl = root.querySelector('.carousel-caption')!;
-      this.index = Number(root.dataset.start) || 0;
+      this.index     = Number(root.dataset.start) || 0;
 
       this.items.forEach((item) => {
-        item.addEventListener('click', () => {
-          this.go(Number(item.dataset.index));
-        });
+        this.applyNaturalRatio(item);
+        item.addEventListener('click', () => this.go(Number(item.dataset.index)));
       });
 
-      root.querySelector('.carousel-btn.next')!.addEventListener('click', () => this.go(this.index + 1));
-      root.querySelector('.carousel-btn.prev')!.addEventListener('click', () => this.go(this.index - 1));
+      root.querySelector('.carousel-btn.next')!
+          .addEventListener('click', () => this.go(this.index + 1));
+      root.querySelector('.carousel-btn.prev')!
+          .addEventListener('click', () => this.go(this.index - 1));
 
       this.render();
     }
 
+    applyNaturalRatio(item: HTMLElement) {
+        if (item.dataset.type === 'video') {
+            item.style.aspectRatio = item.dataset.videoRatio ?? '16 / 9';  // ← was hardcoded
+            return;
+        }
+
+      const img = item.querySelector<HTMLImageElement>('img')!;
+      const apply = () => {
+        if (img.naturalWidth && img.naturalHeight) {
+          item.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+        }
+      };
+
+      if (img.complete && img.naturalWidth > 0) {
+        apply();
+      } else {
+        img.addEventListener('load', apply, { once: true });
+      }
+    }
+
+    /**
+     * Sends a pause command to a YouTube iframe via the IFrame API.
+     * Requires `enablejsapi=1` in the embed URL (already added in the template).
+     */
+    pauseVideo(item: HTMLElement) {
+      const iframe = item.querySelector<HTMLIFrameElement>('iframe');
+      if (!iframe) return;
+      iframe.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }),
+        'https://www.youtube.com',
+      );
+    }
+
     go(i: number) {
       const count = this.items.length;
-      this.index = (i + count) % count;
+      this.index   = (i + count) % count;
       this.render();
     }
 
@@ -243,26 +295,33 @@ const {
       const count = this.items.length;
 
       this.items.forEach((item, i) => {
+        const wasActive = item.classList.contains('is-current');
         item.classList.remove('is-current', 'is-medium', 'is-small');
 
-        // Shortest distance around the loop (so it wraps both directions).
         let dist = Math.abs(i - this.index);
         dist = Math.min(dist, count - dist);
 
         if (dist === 0) {
           item.classList.add('is-current');
-        } else if (dist <= Carousel.MEDIUM_RANGE) {
-          item.classList.add('is-medium');
-        } else if (dist <= Carousel.VISIBLE_RANGE) {
-          item.classList.add('is-small');
+        } else {
+          // Pause any video that just left the center slot
+          if (wasActive) this.pauseVideo(item);
+
+          if      (dist <= Carousel.MEDIUM_RANGE)  item.classList.add('is-medium');
+          else if (dist <= Carousel.VISIBLE_RANGE) item.classList.add('is-small');
+          // beyond VISIBLE_RANGE: no class → hidden (position: absolute, opacity: 0)
         }
-        // dist beyond VISIBLE_RANGE: no class added, stays hidden (opacity 0, position: absolute)
       });
 
-      const img = this.items[this.index].querySelector('img')!;
-      this.captionEl.textContent = img.alt || '';
+      // Caption works for both <img alt="…"> and <iframe title="…">
+      const current = this.items[this.index];
+      const img     = current.querySelector<HTMLImageElement>('img');
+      const iframe  = current.querySelector<HTMLIFrameElement>('iframe');
+      this.captionEl.textContent = img?.alt ?? iframe?.title ?? '';
     }
   }
 
-  document.querySelectorAll<HTMLElement>('.carousel').forEach((el) => new Carousel(el));
+  document.querySelectorAll<HTMLElement>('.carousel').forEach(
+    (el) => new Carousel(el),
+  );
 </script>
