@@ -19,3 +19,7 @@ npm run dev        # http://localhost:4321
 - public/assets/portrait-placeholder.svg -> replace with a real photo
   (update the src in Hero.astro)
 # portfolio
+
+# NEXT TO DOs
+- add a subcaption to hobby gallery
+- add a dropdown to timelines
