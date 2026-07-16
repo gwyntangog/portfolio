@@ -3,8 +3,10 @@ interface Props {
   date: string;
   title: string;
   org?: string;
+  toggleLabel?: string;    // ← new
 }
-const { date, title, org } = Astro.props;
+const { date, title, org, toggleLabel = 'More info' } = Astro.props;
+const hasBody = Astro.slots.has('default');
 ---
 
 <article class="item">
@@ -12,9 +14,19 @@ const { date, title, org } = Astro.props;
   <p class="date">{date}</p>
   <h3>{title}</h3>
   {org && <p class="org">{org}</p>}
-  <div class="body">
-    <slot />
-  </div>
+  {hasBody && (
+    <details class="dropdown">
+      <summary class="toggle">
+        <span>{toggleLabel}</span>
+        <svg class="chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </summary>
+      <div class="body">
+        <slot />
+      </div>
+    </details>
+  )}
 </article>
 
 <style>
@@ -52,13 +64,79 @@ const { date, title, org } = Astro.props;
     opacity: 0.7;
     margin: 0 0 10px;
   }
+
+  /* --- dropdown -------------------------------------------------------- */
+  .dropdown {
+    margin-top: 4px;
+  }
+
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--blue);
+    user-select: none;
+    width: fit-content;
+  }
+  .toggle::-webkit-details-marker { display: none; }
+  .toggle::marker                 { display: none; }
+
+  .toggle:hover {
+    opacity: 0.75;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  /* rotate only when open and not in the middle of closing */
+  details[open]:not(.is-closing) .chevron {
+    transform: rotate(180deg);
+  }
+
   .body {
     font-size: 0.95rem;
+    padding-top: 8px;
+    animation: slideDown 0.25s ease;
   }
-  .body :global(p) {
-    margin: 0 0 10px;
+
+  details.is-closing .body {
+    animation: slideUp 0.25s ease forwards;
   }
-  .body :global(p:last-child) {
-    margin-bottom: 0;
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes slideUp {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-6px); }
+  }
+
+  .body :global(p) { margin: 0 0 10px; }
+  .body :global(p:last-child) { margin-bottom: 0; }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('details.dropdown').forEach((details) => {
+    const summary = details.querySelector<HTMLElement>('summary')!;
+    const body    = details.querySelector<HTMLElement>('.body')!;
+
+    summary.addEventListener('click', (e) => {
+      if (!details.open) return;  // opening: let the browser handle it normally
+
+      // closing: intercept, animate, then remove open
+      e.preventDefault();
+      details.classList.add('is-closing');
+      body.addEventListener('animationend', () => {
+        details.removeAttribute('open');
+        details.classList.remove('is-closing');
+      }, { once: true });
+    });
+  });
+</script>
