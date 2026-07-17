@@ -13,19 +13,21 @@ import Gallery from '../components/Gallery.astro';
   <Nav />
   <Hero />
 
-  <Section id="education" eyebrow="01 / background" title="Education">
+  <Section id="education" eyebrow="01 / " title="Education">
     <Timeline>
-      <TimelineItem date="2027" title="M.Eng. in Computer Science" org="Massachusetts Institute of Technology">
+      <TimelineItem date="2027" title="M.Eng. in Computer Science" org="Massachusetts Institute of Technology" badges={['GPA: 5.0/5.0']} toggleLabel="Courses and Details">
+        <p>This journey is currently in progress. More info coming soon!</p>
       </TimelineItem>
-      <TimelineItem date="2026" title="B.S. in Computer Science and Engineering & Mathematics" org="Massachusetts Institute of Technology" toggleLabel="Courses and Details">
+      <TimelineItem date="2026" title="B.S. in Computer Science and Engineering & Mathematics" org="Massachusetts Institute of Technology" toggleLabel="Courses and Details"
+      badges={['GPA: 4.8 / 5.0', 'HKN Honor Society']}>
         <p>As a major in computer science and engineering, I have beckground in software development and systems. My concentrations were in machine learning and theoretical computer science.</p>
         <p>Software Engineering: 6.1020 (Software Construction), 6.1800 (Computer Systems Engineering)</p>
         <p>ML & AI: 6.3900 (Machine Learning), 6.8301 (Computer Systems and Engineering)</p>
         <p>Theoretical Computer Science: 6.1220 (Design and Analysis of Algorithms), 18.405 (Advanced Complexity Theory), 6.5350 (Matrix Multiplication and Graph Alogrithms)</p>
         <p>Math: 18.03 (Differential Equations), 18.06 (Linear Algebra), 18.04 (Complex Variables with Applications), 18.600 (Probability and Random Variables), 18.781 (Theory of Numbers)</p>
       </TimelineItem>
-      <TimelineItem date="2022" title="International Baccalaureate Diploma" org="Southvile International School and Colleges">
-        <p>Grade: 41/45</p>
+      <TimelineItem date="2022" title="International Baccalaureate Diploma" org="Southvile International School and Colleges"
+      badges={['Grade: 41/45']} toggleLabel="Courses and Details">
         <p>Classes taken: Math AA HL, Chemistry HL, Physics HL, Business Management SL, English Lang & Lit SL, Spanish Ab Initio</p>
       </TimelineItem>
     </Timeline>
@@ -33,71 +35,135 @@ import Gallery from '../components/Gallery.astro';
 
   <Section id="industry" eyebrow="02 / " title="Industry Experience">
     <Timeline>
-      <TimelineItem date="June 2024 - August 2024" title="Implementation Engineer Intern" org="Recidiviz">
+      <TimelineItem date="June 2024 - August 2024" title="Implementation Engineer Intern" org="Recidiviz"
+      highlights={[{label: 'Ream my article here!', href: "https://pkgcenter.mit.edu/social-impact-internships-gwyn-margaux-tangog-26/"}]}
+      skills={['Python', 'Pandas', 'Matplotlib', 'Github', 'PostgreSQL', 'SQL']}>
         <p>I created raw data views and ingested raw data into the system for usage downstream.
           I also took the initiative to propose and implement schema changes that
           improved the organization and usability of data downstream. </p>
       </TimelineItem>
-      <TimelineItem date="January 2024" title="Data and Tech Intern" org="The Engine Room">
+      <TimelineItem date="January 2024" title="Data and Tech Intern" org="The Engine Room"
+      highlights={[{label: 'Ream my article here!', href: "https://pkgcenter.mit.edu/social-impact-internships-gwyneth-margaux-tangog-26/"}, {label: 'My Github repo!', href: "https://github.com/gwyntangog/LITS_data_analytics"}]}
+      skills={['Python', 'Pandas', 'Matplotlib', 'Github', 'Render', 'Dash']}>
         <p> Performed data analysis on recent reporting data from the Light Touch Support program.
           Wrote automation scripts for repetitive data analysis tasks. Made and deployed an interactive data analysis dashboard.
         </p>
-        <p>Github: https://github.com/gwyntangog/LITS_data_analytics Website: https://lits-analyst.onrender.com/  </p>
       </TimelineItem>
     </Timeline>
   </Section>
 
-  <Section id="research" eyebrow="02 / what I work on" title="Research">
+  <Section id="research" eyebrow="03 /" title="Research">
     <p>
-      Current interests lie in theoretical computer science, particularly
-      counting complexity and hardness. Past work spans sustainability and
-      economics.
+      While figuring out my research focus, I explored theoretical computer science, sustainability, and economics.
     </p>
     <Timeline>
-      <TimelineItem date="June 2025 – May 2026" title="Counting Complexity of Solo Chess" org="MIT Theory of Computation">
+      <TimelineItem date="June 2026 – current" title="Modeling Copper Substitution" org="MIT Materials Sustainability Lab"
+      highlights={['⭐ Main Contributor']}
+      skills={['AI', 'Python', 'Pandas', 'Matplotlib']}
+      toggleLabel="About the project">
+        <p>
+          Writing programs and building a UI to moddle how the market share of copper changes
+          as aluminum price, copper price, and price ratios change.
+        </p>
+      </TimelineItem>
+      <TimelineItem date="February 2026 – May 2026" title="Alogrithms Wiki" org="MIT Future Tech"
+      highlights={['🙌 Collaborator']}
+      skills={['Algorithms', 'Complexity', 'Proofs']}
+      toggleLabel="About the project">
+        <p>
+          Contributed to the Algorithms Wihi by surveying algorithms textbooks for problems.
+        </p>
+      </TimelineItem>
+      <TimelineItem date="June 2025 – December 2025" title="Counting Complexity of Solo Chess" org="MIT Theory of Computation"
+      highlights={['⭐ Main Contributor']}
+      skills={['Algorithms', 'Complexity', 'Proofs']}
+      toggleLabel="About the project">
         <p>
           Proved ASP-completeness via reductions from Hamiltonian paths and
           Knight's Tours, and generalized the result to several fairy pieces.
-          Manuscript in progress.
+          Drafted a manuscript.
         </p>
       </TimelineItem>
-      <TimelineItem date="Feb 2025 – May 2025" title="Hardness of Graph Threading in Grid Graphs" org="MIT Theory of Computation">
+      <TimelineItem date="Janury 2025 – May 2025" title="Hardness of Graph Threading in Grid Graphs" org="MIT Theory of Computation"
+      highlights={['🙌 Collaborator']}
+      skills={['Algorithms', 'Complexity Analysis', 'Proofs']}
+      toggleLabel="About the project">
         <p>
           Studied the grid-graph case of Graph Threading; found a
           polynomial-time algorithm for a special case while investigating
           NP-hardness.
         </p>
       </TimelineItem>
-      <TimelineItem date="Sep 2023 – May 2024" title="Gamification Data & Concrete Delivery Workforce" org="MIT Concrete Sustainability Hub">
+      <TimelineItem date="June 2024 – August 2024" title="Analysis of the impact of automaker strategies on lithium price elasticity using a novel bottom-up demand model" org="MIT Concrete Sustainability Hub"
+      highlights={['🙌 Collaborator',{label: 'Published Paper', href: "https://doi.org/10.1016/j.resconrec.2025.108477"}]}
+      skills={['Python', 'Pandas','Matplotlib']}
+      toggleLabel="About the project">
+        <p>
+          Contributed literature review and improved graphing via Python.
+        </p>
+      </TimelineItem>
+      <TimelineItem date="February 2024 – May 2024" title="Assessment of Gamification Data to inform Concrete Delivery Professional Shortage" org="MIT Concrete Sustainability Hub"
+      highlights={['⭐ Main Contributor', {label:'Research Poster', href:"https://drive.google.com/file/d/1RqNX0FYlklpnejkK-74roY5JqA5cg5Tj/view"}]}
+      skills={['Python', 'Pandas', 'Matplotlib', 'Survey Writing']}
+      toggleLabel="About the project">
         <p>
           Analyzed driver productivity and retention data with Python;
           presented a research poster to industry stakeholders.
         </p>
       </TimelineItem>
-      <TimelineItem date="Sep 2023 – May 2024" title="Heterogeneity of Child Penalty" org="MIT Economics Department">
+      <TimelineItem date="August 2024 – January 2024" title="Modeling Carbon Uptake" org="MIT Concrete Sustainability Hub"
+      highlights={['⭐ Main Contributor', {label:'Research Poster', href:"https://drive.google.com/file/d/1OfOODrRrusjJKFxdST8uftOiSRQCJJMI/view"},
+      {label: 'Research Brief', href: "https://bpb-us-e1.wpmucdn.com/sites.mit.edu/dist/a/1711/files/2026/05/26.05.13-Site-Specific-Uptake.pdf"}]}
+      skills={['Python', 'Pandas', 'Matplotlib']}
+      toggleLabel="About the project">
+        <p>
+        Analyzed data from several concrete companies who use gamification to measure
+        the impacts of gamification on driver productivity, retention, and recruitment using Python.
+        </p>
+      </TimelineItem>
+      <TimelineItem date="June 2023 – August 2023" title="Heterogeneity of Child Penalty" org="MIT Economics Department"
+      highlights={['🙌 Collaborator']}
+      skills={['STATA']}
+      toggleLabel="About the project"
+      >
         <p>Reviewed related literature and modeled trends in STATA.</p>
       </TimelineItem>
+      <TimelineItem date="June 2023 – August 2023" title="Effects of Reducing Gastroenterology Capacity" org="MIT Economics Department"
+      highlights={['🙌 Collaborator']}
+      skills={['Python', 'Pandas', 'Matplotlib']}
+      toggleLabel="About the project">
+        <p>Analyzed and cleaned data using Python.</p>
+      </TimelineItem>
     </Timeline>
   </Section>
 
-  <Section id="Leadership, teaching, and mentorship." eyebrow="03 / outside the lab" title="Leadership, teaching, and membership.">
+  <Section id="leadership" eyebrow="04 /" title="Leadership, Teaching, and Mentorship">
     <Timeline>
-      <TimelineItem date="September 2024 – May 2026" title="Teaching Assistant (Math for Computer Science)" org="MIT EECS Department">
-        <p>Organize study breaks and mentor first-years on classes, friendships, and clubs.</p>
+      <TimelineItem date="September 2024 – May 2026" title="Teaching Assistant (Math for Computer Science)" org="MIT EECS Department"
+      highlights={[{label: "Watch me hold a review session here!", href: "https://www.youtube.com/watch?v=djMiglg9qqw"}]}
+      >
+        <p>Ran a recitation section of 10-20 students where I prove concept reviews and space for problem-solving and receiving feedback.
+          In my first semester as a TA, I took the initiative to start hosting review sessions for students before midterms.</p>
       </TimelineItem>
       <TimelineItem date="June 2025 - August 2025" title="Interphase Edge Residential Facilitator (Teaching Assistant and Counselor)" org="MIT Office of Minority Education">
-        <p>Organize study breaks and mentor first-years on classes, friendships, and clubs.</p>
+        <p>As a TA, I ran a recitation section of 12 in-person students and online recitation of 20 students. I also held office hours and graded assessments for the class Calculus 2.
+          I took the initiative to standardize TA material on Overleaf for future TA's to use.</p>
       </TimelineItem>
-      <TimelineItem date="2024 – 2025" title="International Orientation Coordinator" org="MIT">
+      <TimelineItem date="2024 – 2025" title="International Orientation Coordinator" org="MIT International Students Office">
         <p>Coordinated events for incoming international students; designed the orientation photobook.</p>
       </TimelineItem>
-      <TimelineItem date="Feb 2023 – Dec 2024" title="Research Editor & Web Master" org="MIT Undergraduate Research Journal">
-        <p>Reviewed articles for publication and interviewed MIT faculty for two issues.</p>
+      <TimelineItem date="Feb 2023 – Dec 2024" title="Resident Peer Mentor" org="MIT McCormick Hall">
+        <p>Organized study breaks and provide mentorship to firstyears in my dorm from anything to classes and friendships to clubs and hobbies.</p>
+      </TimelineItem>
+      <TimelineItem date="June 2016 - May 2022" title="Competitive Math Trainer" org="Southville International School and Colleges">
+        <p>Took the initiative to train schoolmates for math competitions by teaching from the textbooks and materials I studied.
+          This successfully influenced more students to participate in math contests!
+        </p>
       </TimelineItem>
     </Timeline>
   </Section>
 
-  <Section id="achievements" eyebrow="" title="Achievements">
+  <Section id="awards" eyebrow="05 /" title="Awards">
     <Timeline>
       <TimelineItem date="2026" title="Eta Kappa Nu Honor Society" org="Massachusetts Institute of Technology">
         <p>I was officially inducted in the spring of 2026 for my high grades and contributions (social impact internships).
@@ -115,11 +181,6 @@ import Gallery from '../components/Gallery.astro';
         <p>I was one of the four women who represented team Philippines that year!</p>
       </TimelineItem>
       <TimelineItem date="2019" title="Philippine Math Olympiad National Finalist (Top 22)">
-        <p>I attended Math Olympiad Summer Camp, the Philippines' IMO team selection process.
-          While I was not selected for the team that year, I learned a lot.
-         I was unfortunately unable to continue with this journey due to burnout and the COVID lockdowns.</p>
-      </TimelineItem>
-      <TimelineItem date="2018" title="Philippine Math Olympiad National Finalist (Top 22)">
         <p>I attended Math Olympiad Summer Camp, the Philippines' IMO team selection process.
           While I was not selected for the team that year, I learned a lot.
          I was unfortunately unable to continue with this journey due to burnout and the COVID lockdowns.</p>
