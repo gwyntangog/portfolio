@@ -49,6 +49,9 @@ const tabs = [
           <div class="tag-row">
             {project.tech.map((t: string) => <span class="tag">{t}</span>)}
           </div>
+          <div class="tag-row">
+            {project.wip ? (<span class="wip">{"🛠️ Work in Progress"}</span>) : (<span class="wip">{"Completed"}</span>) }
+          </div>
           <div class="card-links">
             {project.github && (
               <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn btn--ghost">
@@ -281,6 +284,15 @@ const tabs = [
     font-weight: 500;
     padding: 0.2rem 0.6rem;
     background: #f3f4f6;
+    color: #374151;
+    border-radius: 999px;
+  }
+
+  .wip {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    background: #e2e7e9;
     color: #374151;
     border-radius: 999px;
   }

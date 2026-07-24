@@ -5,6 +5,7 @@ export interface Project {
   github?: string;
   live?: string;
   image?: string;
+  wip?: string;
 }
 
 export interface TeachingSession {
@@ -28,17 +29,19 @@ export interface ResearchOutput {
 
 export const projects: Project[] = [
     {
-    title: "🛠️ Work in Progress 🛠️",
-    description: "🛠️ work in progress 🛠️",
+    title: "coming soon",
+    description: "new project coming soon",
     tech: [],
+    wip: "true",
   },
   {
     title: "Material Substitution Data Dashboard",
-    description: "🛠️ Work in progress. A dashboard that shows how the demand for products predominantly made of copper change with material prices. Makes use of synthetic interview data to create utility functions.",
+    description: "A dashboard that shows how the demand for products predominantly made of copper change with material prices. Makes use of synthetic interview data to create utility functions.",
     tech: ["Python", "Pandas", "Matplotlib"],
     github: "https://github.com/gwyntangog/msl_analysis",
     image: `${import.meta.env.BASE_URL}/assets/thumbnails/msl_dashboard.png`,
     live: "https://gwyntangog.github.io/msl_analysis/",
+    wip: "true",
   },
   {
     title: "Portfolio Website",
@@ -46,6 +49,7 @@ export const projects: Project[] = [
     tech: ["HTML", "CSS", "Astro", "TypeScript"],
     github: "https://github.com/gwyntangog/portfolio",
     live: "https://gwyntangog.github.io/portfolio/",
+    wip: "true",
   },
   {
     title: "Light Touch Support Program Analytics Dashboard",
