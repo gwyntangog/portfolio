@@ -1,0 +1,355 @@
+---
+import { projects, teaching, research } from '../data/featured';
+import type { Project, TeachingSession, ResearchOutput } from '../data/featured';
+
+const tabs = [
+  { id: 'projects',  label: 'Projects',  count: projects.length  },
+  { id: 'teaching',  label: 'Teaching',  count: teaching.length  },
+  { id: 'research',  label: 'Research',  count: research.length  },
+];
+---
+
+<section class="featured-work">
+  <!-- <h2 class="section-title">Featured Work</h2> -->
+
+  <!-- Tab Buttons -->
+  <div class="tabs" role="tablist">
+    {tabs.map((tab, i) => (
+      <button
+        class={`tab-btn ${i === 0 ? 'active' : ''}`}
+        role="tab"
+        data-tab={tab.id}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        aria-controls={tab.id}
+      >
+        {tab.label}
+        <span class="tab-count">{tab.count}</span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Projects Panel -->
+  <div class="tab-panel active" id="projects" role="tabpanel">
+    <div class="cards-grid">
+      {projects.map((project: Project) => (
+        <article class="card">
+             {project.image && (
+                <div class="card-image">
+                <img src={project.image} alt={project.title} loading="lazy" />
+                </div>
+            )}
+          <div class="card-top">
+            <h3 class="card-title">{project.title}</h3>
+            {project.live
+              ? <span class="badge badge--live">Live ↗</span>
+              : <span class="badge badge--repo">Repo only</span>
+            }
+          </div>
+          <p class="card-desc">{project.description}</p>
+          <div class="tag-row">
+            {project.tech.map((t: string) => <span class="tag">{t}</span>)}
+          </div>
+          <div class="card-links">
+            {project.github && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn btn--ghost">
+                GitHub →
+              </a>
+            )}
+            {project.live && (
+              <a href={project.live} target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+                Live ↗
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <!-- Teaching Panel -->
+  <div class="tab-panel" id="teaching" role="tabpanel">
+    <div class="cards-grid">
+      {teaching.map((session: TeachingSession) => (
+        <article class="card">
+             {session.image && (           // ← add this block
+                <div class="card-image">
+                <img src={session.image} alt={session.title} loading="lazy" />
+                </div>
+            )}
+          <div class="card-top">
+            <h3 class="card-title">{session.title}</h3>
+            <span class="badge badge--teaching">Session</span>
+          </div>
+          <p class="card-meta">{session.course} · {session.semester}</p>
+          <p class="card-desc">{session.description}</p>
+          {session.materials && (
+            <div class="card-links">
+              <a href={session.materials} target="_blank" rel="noopener noreferrer" class="btn btn--ghost">
+                View Materials →
+              </a>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <!-- Research Panel -->
+  <div class="tab-panel" id="research" role="tabpanel">
+    <div class="cards-grid">
+      {research.map((item: ResearchOutput) => (
+        <article class="card">
+            {item.image && (              // ← add this block
+                <div class="card-image">
+                <img src={item.image} alt={item.title} loading="lazy" />
+                </div>
+            )}
+          <div class="card-top">
+            <h3 class="card-title">{item.title}</h3>
+            <span class={`badge badge--${item.type.toLowerCase()}`}>{item.type}</span>
+          </div>
+          <p class="card-meta">{item.lab}</p>
+          <p class="card-desc">{item.description}</p>
+          {item.link && (
+            <div class="card-links">
+              <a href={item.link} target="_blank" rel="noopener noreferrer" class="btn btn--ghost">
+                View {item.type} →
+              </a>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+  const tabPanels = document.querySelectorAll<HTMLElement>('.tab-panel');
+
+  function switchTab(targetId: string) {
+    tabBtns.forEach((btn) => {
+      const isActive = btn.dataset.tab === targetId;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-selected', String(isActive));
+    });
+    tabPanels.forEach((panel) => {
+      panel.classList.toggle('active', panel.id === targetId);
+    });
+  }
+
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.tab) switchTab(btn.dataset.tab);
+    });
+  });
+</script>
+
+<style>
+  .featured-work {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    gap: 0.25rem;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 2rem;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;   /* sits on top of .tabs border */
+    cursor: pointer;
+    color: #6b7280;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab-btn:hover       { color: #111827; }
+  .tab-btn.active      { color: #111827; border-bottom-color: #111827; }
+
+  .tab-count {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #6b7280;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .tab-btn.active .tab-count {
+    background: #111827;
+    color: #fff;
+  }
+
+  /* ── Panels ── */
+  .tab-panel {
+    display: none;
+    opacity: 0;
+  }
+
+  .tab-panel.active {
+    display: block;
+    animation: fadeUp 0.2s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0);   }
+  }
+
+  /* ── Grid ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* ── Card ── */
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .card-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+    color: #374151;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1; /* pushes card-links to the bottom */
+  }
+
+  /* ── Tech tags ── */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    background: #f3f4f6;
+    color: #374151;
+    border-radius: 999px;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .badge--live     { background: #dcfce7; color: #166534; }
+  .badge--repo     { background: #f3f4f6; color: #6b7280; }
+  .badge--teaching { background: #dbeafe; color: #1e40af; }
+  .badge--poster   { background: #fce7f3; color: #9d174d; }
+  .badge--award    { background: #fef3c7; color: #92400e; }
+  .badge--brief    { background: #ede9fe; color: #5b21b6; }
+  .badge--paper    { background: #ecfdf5; color: #065f46; }
+
+  /* ── Link buttons ── */
+  .card-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+
+  .btn {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.4rem 0.875rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .btn--ghost {
+    border: 1px solid #d1d5db;
+    color: #374151;
+    background: transparent;
+  }
+  .btn--ghost:hover  { background: #f9fafb; }
+
+  .btn--primary {
+    background: #111827;
+    color: #fff;
+    border: 1px solid #111827;
+  }
+  .btn--primary:hover { background: #374151; }
+  .card-image {
+  width: calc(100% + 2.5rem);   /* bleeds past card padding */
+  margin: -1.25rem -1.25rem 0;  /* negative margin trick */
+  border-radius: 0.75rem 0.75rem 0 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-image img {
+  transform: scale(1.03); /* subtle zoom on hover */
+}
+</style>
