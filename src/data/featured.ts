@@ -14,6 +14,7 @@ export interface TeachingSession {
   description: string;
   materials?: string;
   image?: string;
+  caption?: string;
 }
 
 export interface ResearchOutput {
@@ -26,13 +27,21 @@ export interface ResearchOutput {
 }
 
 export const projects: Project[] = [
+    {
+    title: "🛠️ Work in Progress 🛠️",
+    description: "🛠️ work in progress 🛠️",
+    tech: ["React", "TypeScript", "Tailwind CSS"],
+    github: "https://github.com/gwynt/project-alpha",
+    live: "https://project-alpha.vercel.app",
+    // image: "/images/project-alpha.png",
+  },
   {
     title: "Material Substitution Data Dashboard",
     description: "A brief description of what this project does and why it matters.",
     tech: ["React", "TypeScript", "Tailwind CSS"],
     github: "https://github.com/gwynt/project-alpha",
     live: "https://project-alpha.vercel.app",
-    image: "/images/project-alpha.png",
+    // image: "/images/project-alpha.png",
   },
   {
     title: "Portfolio Website",
@@ -53,6 +62,7 @@ export const projects: Project[] = [
     description: "A dee",
     tech: ["Python", "FastAPI", "PostgreSQL"],
     github: "https://github.com/gwynt/project-beta",
+    // image: "/images/project-alpha.png",
     // no live = shows "Repo only" badge automatically
   },
 ];
@@ -62,8 +72,10 @@ export const teaching: TeachingSession[] = [
     title: "Exam Review Session",
     course: "6.1200 Math for Computer Science",
     semester: "Fall 2025",
-    description: "Led a class-wide review session covering proof techniques.",
-    materials: "https://link-to-your-slides.com",
+    description: "Led a class-wide review session covering proof techniques. I started this tradition during my first semester as a teaching assistant.",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/612Teaching.jpeg`,
+    materials: "https://www.youtube.com/watch?v=djMiglg9qqw",
+    caption: "Watch the video here!",
   },
 ];
 
