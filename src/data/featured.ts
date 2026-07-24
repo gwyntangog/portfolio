@@ -19,7 +19,7 @@ export interface TeachingSession {
 
 export interface ResearchOutput {
   title: string;
-  lab: string;
+  lab?: string;
   type: 'Poster' | 'Award' | 'Brief' | 'Paper';
   description: string;
   link?: string;
@@ -30,40 +30,44 @@ export const projects: Project[] = [
     {
     title: "🛠️ Work in Progress 🛠️",
     description: "🛠️ work in progress 🛠️",
-    tech: ["React", "TypeScript", "Tailwind CSS"],
-    github: "https://github.com/gwynt/project-alpha",
-    live: "https://project-alpha.vercel.app",
-    // image: "/images/project-alpha.png",
+    tech: [],
   },
   {
     title: "Material Substitution Data Dashboard",
-    description: "A brief description of what this project does and why it matters.",
-    tech: ["React", "TypeScript", "Tailwind CSS"],
-    github: "https://github.com/gwynt/project-alpha",
-    live: "https://project-alpha.vercel.app",
-    // image: "/images/project-alpha.png",
+    description: "🛠️ Work in progress. A dashboard that shows how the demand for products predominantly made of copper change with material prices. Makes use of synthetic interview data to create utility functions.",
+    tech: ["Python", "Pandas", "Matplotlib"],
+    github: "https://github.com/gwyntangog/msl_analysis",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/msl_dashboard.png`,
+    live: "https://gwyntangog.github.io/msl_analysis/",
   },
   {
     title: "Portfolio Website",
-    description: "A dee",
-    tech: ["Python", "FastAPI", "PostgreSQL"],
-    github: "https://github.com/gwynt/project-beta",
-    // no live = shows "Repo only" badge automatically
+    description: "This website! I upgraded from my first website (which was made using a template), to one made from scratch.",
+    tech: ["HTML", "CSS", "Astro", "TypeScript"],
+    github: "https://github.com/gwyntangog/portfolio",
+    live: "https://gwyntangog.github.io/portfolio/",
   },
   {
     title: "Light Touch Support Program Analytics Dashboard",
-    description: "A dee",
-    tech: ["Python", "FastAPI", "PostgreSQL"],
-    github: "https://github.com/gwynt/project-beta",
-    // no live = shows "Repo only" badge automatically
+    description: "For my internship, I performed data analysis on recent reporting data from the Engine Room's Light Touch Support program. Wrote automation scripts for repetitive data analysis tasks. Made and deployed an interactive data analysis dashboard.",
+    tech: ["Python", "Dash", "JavaScript"],
+    github: "https://github.com/gwyntangog/LITS_data_analytics",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/lits_dashboard.png`,
+    live: "https://lits-analyst.onrender.com/"
   },
   {
     title: "Journal Cooking",
-    description: "A dee",
-    tech: ["Python", "FastAPI", "PostgreSQL"],
-    github: "https://github.com/gwynt/project-beta",
-    // image: "/images/project-alpha.png",
-    // no live = shows "Repo only" badge automatically
+    description: "Developed a recipe-sharing website in a team as part of the MIT Web Lab class. The process covered brain storming, mock-ups, and programming.",
+    tech: ["JavaScript", "CSS", "React"],
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/journal_cooking.png`,
+    github: "https://github.com/weblab-class/Gyuu03-littlenotebook-airconbear",
+  },
+  {
+    title: "First Iteration - Personal Website",
+    description: "My first iteration of a personal website, using a bootstrap website.",
+    tech: ["HTML", "CSS", "JavaScript"],
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/first_personal.png`,
+    github: "https://github.com/gwyntangog/resume",
   },
 ];
 
@@ -81,24 +85,24 @@ export const teaching: TeachingSession[] = [
 
 export const research: ResearchOutput[] = [
   {
-    title: "Your Poster Title Here",
-    lab: "Your Lab Name",
+    title: "Assessment of Gamification Data to inform Concrete Delivery Professional Shortage",
     type: "Poster",
-    description: "Brief description of the research and what was presented.",
-    link: "https://link-to-poster.com",
+    description: "I analyzed data from several concrete companies using gamification to measure its impacts on driver productivity, retention, and recruitment using Python. I made a research poster and presented it to industry stakeholders.",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/gamification.png`,
+    link: "https://drive.google.com/file/d/1RqNX0FYlklpnejkK-74roY5JqA5cg5Tj/view?usp=drive_link",
   },
   {
-    title: "Award Name Here",
-    lab: "Your Lab Name",
+    title: "Site-Specific Carbon Uptake Estimation of Crushed Concrete at End-of-Life",
+    type: "Poster",
+    description: "I performed data cleaning and modeling to analyze the amount of carbon uptake in a specific cement stockpile yard. I made a research poster and presented results to industry stakeholders.",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/carbonuptake.png`,
+    link: "https://drive.google.com/file/d/1OfOODrRrusjJKFxdST8uftOiSRQCJJMI/view?usp=drive_link",
+  },
+  {
+    title: "Outstanding UROP Student Award",
     type: "Award",
-    description: "Brief description of what this award recognized.",
-    // no link is fine
-  },
-  {
-    title: "Research Brief Title",
-    lab: "Your Lab Name",
-    type: "Brief",
-    description: "Brief description of the research brief and its scope.",
-    link: "https://link-to-brief.com",
+    description: "The Outstanding UROP Student Awards recognize students for exceptional contributions as undergraduate researchers. Recipients are selected based on nominations submitted by UROP supervisors and mentors.",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/urop_award.png`,
+    link: "https://urop.mit.edu/mentors/outstanding-student/student-recipients/",
   },
 ];
