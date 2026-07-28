@@ -1,0 +1,256 @@
+---
+// src/components/Mascot.astro
+// No props needed — all state is handled client-side
+---
+
+<div id="mascot-container" aria-live="polite">
+  <div id="speech-bubble" class="hidden">
+    <p id="speech-text"></p>
+    <button id="restart-btn" class="hidden" aria-label="Restart conversation">
+      ↩ start over
+    </button>
+  </div>
+
+  <button id="mascot-btn" aria-label="Talk to mascot">
+    <img
+      src="/portfolio/assets/mascot.png"
+      alt="A little hand-drawn mascot"
+      id="mascot-img"
+      draggable="false"
+    />
+  </button>
+</div>
+
+<script>
+  // Each entry: which text to show AND which image to use
+  // `image` is optional — falls back to the default if omitted
+  const DEFAULT_IMAGE = "/images/mascot-neutral.png";
+
+  const LINES = [
+    { text: "Hi, I'm mini-Gwyn! 😄",                               image: "/portfolio/assets/mascot.png"     },
+    { text: "Gwyn didn't think a chatbot would be a good use of resources on this page...",     image: "/portfolio/assets/mascot.png"     },
+    { text: "So I'm here instead!",   image: "/portfolio/assets/mascot.png"     },
+    { text: "I'm cuter anyway.",      image: "/portfolio/assets/mascot.png"   },
+    { text: "Oh, yeah, summary: Gwyn likes art, crochet, music, and games.",      image: "/portfolio/assets/mascot.png"   },
+    { text: "There are lots of fun pictures to look at on this page!",  image: "/portfolio/assets/mascot.png"     },
+    { text: "Especially me!",               image: "/portfolio/assets/mascot.png"     },
+    { text: "😄",  image: "/portfolio/assets/mascot.png"   },
+    { text: "I'm so happy you're here! 😄",           image: "/portfolio/assets/mascot.png"   },
+  ];
+
+  const TYPEWRITER_SPEED = 30;
+
+  const bubble    = document.getElementById("speech-bubble")!;
+  const textEl    = document.getElementById("speech-text")!;
+  const mascotBtn = document.getElementById("mascot-btn")!;
+  const restartBtn= document.getElementById("restart-btn")!;
+  const mascotImg = document.getElementById("mascot-img") as HTMLImageElement;
+
+  let currentIndex = 0;
+  let isTyping = false;
+  let typeInterval: ReturnType<typeof setInterval> | null = null;
+
+  function clearTyping() {
+    if (typeInterval !== null) {
+      clearInterval(typeInterval);
+      typeInterval = null;
+    }
+  }
+
+  function setMascotImage(src: string) {
+    // Small fade swap so it doesn't just jolt
+    mascotImg.style.opacity = "1";
+    setTimeout(() => {
+      mascotImg.src = src ?? DEFAULT_IMAGE;
+      mascotImg.style.opacity = "1";
+    }, 100);
+  }
+
+  function typeText(text: string, onDone?: () => void) {
+    clearTyping();
+    isTyping = true;
+    textEl.textContent = "";
+    restartBtn.classList.add("hidden");
+
+    let i = 0;
+    typeInterval = setInterval(() => {
+      textEl.textContent += text[i];
+      i++;
+      if (i >= text.length) {
+        clearTyping();
+        isTyping = false;
+        onDone?.();
+      }
+    }, TYPEWRITER_SPEED);
+  }
+
+  function showLine(index: number) {
+    const { text, image } = LINES[index];
+
+    setMascotImage(image ?? DEFAULT_IMAGE);
+
+    bubble.classList.remove("hidden");
+    bubble.classList.add("pop");
+    bubble.addEventListener("animationend", () => bubble.classList.remove("pop"), { once: true });
+
+    typeText(text, () => {
+      if (index === LINES.length - 1) {
+        restartBtn.classList.remove("hidden");
+      }
+    });
+  }
+
+  function handleMascotClick() {
+    if (isTyping) {
+      clearTyping();
+      isTyping = false;
+      textEl.textContent = LINES[currentIndex].text;
+      if (currentIndex === LINES.length - 1) {
+        restartBtn.classList.remove("hidden");
+      }
+      return;
+    }
+
+    if (currentIndex >= LINES.length - 1 && !bubble.classList.contains("hidden")) return;
+
+    if (bubble.classList.contains("hidden")) {
+      currentIndex = 0;
+      showLine(currentIndex);
+      return;
+    }
+
+    currentIndex++;
+    showLine(currentIndex);
+  }
+
+  function handleRestart() {
+    currentIndex = 0;
+    restartBtn.classList.add("hidden");
+    showLine(currentIndex);
+  }
+
+  mascotBtn.addEventListener("click", handleMascotClick);
+  restartBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    handleRestart();
+  });
+</script>
+
+<style>
+  #mascot-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    z-index: 9999;
+    font-family: inherit;
+  }
+
+  #mascot-img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(2px 3px 0px rgba(0,0,0,0.15));
+  /* transition: opacity 0.1s ease; ← add this */
+    }
+
+  /* ── Speech bubble ── */
+  #speech-bubble {
+    position: relative;
+    background: #fff;
+    border: 2px solid #222;
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+    max-width: 220px;
+    box-shadow: 3px 3px 0 #222;
+
+    /* tail pointing down-right */
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      right: 20px;
+      border: 6px solid transparent;
+      border-top-color: #222;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: -9px;
+      right: 21px;
+      border: 5px solid transparent;
+      border-top-color: #fff;
+      z-index: 1;
+    }
+  }
+
+  #speech-text {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #222;
+    min-height: 1.2em; /* stop layout jump while typing */
+  }
+
+  #restart-btn {
+    display: block;
+    margin-top: 0.5rem;
+    background: none;
+    border: 1.5px solid #aaa;
+    border-radius: 0.4rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      border-color: #222;
+      color: #222;
+    }
+  }
+
+  /* ── Mascot button ── */
+  #mascot-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+
+    &:hover {
+      transform: scale(1.08) rotate(-3deg);
+    }
+
+    &:active {
+      transform: scale(0.95) rotate(3deg);
+    }
+  }
+
+  #mascot-img {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    /* optional: give them a little drop shadow */
+    filter: drop-shadow(2px 3px 0px rgba(0,0,0,0.15));
+  }
+
+  /* ── Utilities ── */
+  .hidden {
+    display: none !important;
+  }
+
+  /* ── Pop animation ── */
+  @keyframes pop {
+    0%   { transform: scale(0.85); opacity: 0; }
+    60%  { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1);    opacity: 1; }
+  }
+
+  .pop {
+    animation: pop 0.2s ease forwards;
+  }
+</style>
