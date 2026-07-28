@@ -36,7 +36,7 @@
   </div>
 </div>
 
-<style>
+<style is:global>
   .ask-trigger {
     position: fixed;
     bottom: 28px;
@@ -55,7 +55,6 @@
   }
   .ask-trigger:hover { transform: translateY(-2px); opacity: 0.9; }
 
-  /* fullscreen dimmed overlay */
   .ask-overlay {
     display: none;
     position: fixed;
@@ -69,7 +68,7 @@
   }
   .ask-overlay.is-open {
     display: flex;
-    animation: fadeIn 0.2s ease;
+    animation: ask-fadeIn 0.2s ease;
   }
 
   .ask-panel {
@@ -81,7 +80,7 @@
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 12px 48px rgba(0,0,0,0.22);
-    animation: slideUp 0.25s ease;
+    animation: ask-slideUp 0.25s ease;
   }
 
   .ask-header {
@@ -94,6 +93,7 @@
     font-size: 0.82rem;
     color: var(--blue);
   }
+
   .ask-close {
     background: none;
     border: none;
@@ -116,42 +116,71 @@
 
   .message {
     max-width: 85%;
-    padding: 9px 13px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.55;
     white-space: pre-wrap;
   }
   .message.user {
     align-self: flex-end;
     background: var(--blue);
     color: #fff;
-    border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 4px;
+  }
+  .message.user::before {
+    content: "You";
+    display: block;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 4px;
   }
   .message.assistant {
     align-self: flex-start;
-    background: rgba(0,0,0,0.06);
-    border-bottom-left-radius: 3px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-bottom-left-radius: 4px;
+    font-family: var(--font-mono);
+  }
+  .message.assistant::before {
+    content: "Mini-Chat";
+    display: block;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--blue);
+    margin-bottom: 4px;
   }
   .message.assistant.is-streaming::after {
     content: '▍';
-    animation: blink 0.7s step-end infinite;
+    animation: ask-blink 0.7s step-end infinite;
   }
 
   .ask-form {
     display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: 8px;
     padding: 12px;
     border-top: 1px solid rgba(0,0,0,0.07);
   }
   .ask-input {
     flex: 1;
+    min-width: 0;
     border: 1px solid rgba(0,0,0,0.12);
     border-radius: 8px;
     padding: 8px 12px;
     font-size: 0.9rem;
     outline: none;
     background: transparent;
+    /* beat any global input reset */
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
   }
   .ask-input:focus { border-color: var(--blue); }
 
@@ -168,15 +197,15 @@
     place-items: center;
     transition: opacity 0.15s;
   }
-  .ask-send:hover   { opacity: 0.85; }
+  .ask-send:hover    { opacity: 0.85; }
   .ask-send:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideUp { from { transform: translateY(16px); opacity: 0; }
-                       to   { transform: translateY(0);    opacity: 1; } }
-  @keyframes blink   { 50% { opacity: 0; } }
+  /* prefixed to avoid colliding with any other keyframes globally */
+  @keyframes ask-fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ask-slideUp { from { transform: translateY(16px); opacity: 0; }
+                           to   { transform: translateY(0);    opacity: 1; } }
+  @keyframes ask-blink   { 50% { opacity: 0; } }
 </style>
-
 
 <script>
   const trigger  = document.getElementById('ask-trigger')!;
