@@ -28,10 +28,13 @@ export interface ResearchOutput {
 }
 
 export const projects: Project[] = [
-    {
-    title: "coming soon",
-    description: "new project coming soon",
-    tech: [],
+  {
+    title: "Pokemon Cards Expected Value Calculator",
+    description: "A dashboard that shows you the expected value you get from opening packs, how many packs you need to open to pull a card of a specific rarity, and how many packs you expect to open when chasing a card. I made this to discourage myself from the gambling side of pokemon.",
+    tech: ["Javascript", "HTML", "CSS", "API", "Fullstack","Frontend","Backend"],
+    github: "https://github.com/gwyntangog/ev_calc",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/pokemon_ev_calc.png`,
+    live: "https://pokemon-ev-calculator.onrender.com/",
     wip: "true",
   },
   {
