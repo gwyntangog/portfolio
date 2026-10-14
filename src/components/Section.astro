@@ -18,9 +18,20 @@ const { id, eyebrow, title } = Astro.props;
 </section>
 
 <style>
+  :root {
+  --section-light: #f7fafc;
+  --section-alt:  #e8f1fa; /* pick any tint you like */
+}
+
   .section {
     padding: 64px 0;
+    background: var(--section-light);
   }
+
+  .section:nth-of-type(even) {
+    background: var(--section-alt);
+  }
+
   .section:not(:last-of-type) {
     border-bottom: 1px dashed var(--line);
   }
