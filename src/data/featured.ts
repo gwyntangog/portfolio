@@ -8,6 +8,16 @@ export interface Project {
   wip?: string;
 }
 
+export interface PersonalProject {
+  title: string;
+  description: string;
+  tech: string[];
+  github?: string;
+  live?: string;
+  image?: string;
+  wip?: string;
+}
+
 export interface TeachingSession {
   title: string;
   course: string;
@@ -29,36 +39,12 @@ export interface ResearchOutput {
 
 export const projects: Project[] = [
   {
-    title: "Pokemon Cards Expected Value Calculator",
-    description: "A dashboard that shows you the expected value you get from opening packs, how many packs you need to open to pull a card of a specific rarity, and how many packs you expect to open when chasing a card. I made this to discourage myself from the gambling side of pokemon.",
-    tech: ["Javascript", "HTML", "CSS", "API", "Fullstack","Frontend","Backend"],
-    github: "https://github.com/gwyntangog/ev_calc",
-    image: `${import.meta.env.BASE_URL}/assets/thumbnails/pokemon_ev_calc.png`,
-    live: "https://pokemon-ev-calculator.onrender.com/",
-    wip: "true",
-  },
-  {
-    title: "Material Substitution Interview Chatbot",
-    description: "A chatbot that answers questions rooted in real-life interviews conducted with companies.",
-    tech: ["Astro","Cloudflare","Prompting"],
-    github: "https://github.com/gwyntangog/msl_interview_chat",
-    image: `${import.meta.env.BASE_URL}/assets/thumbnails/msl_interview_bot.png`,
-    live: "https://gwyntangog.github.io/msl_interview_chat/",
-  },
-  {
     title: "Material Substitution Data Dashboard",
     description: "A dashboard that shows how the demand for products predominantly made of copper change with material prices. Makes use of synthetic interview data to create utility functions.",
     tech: ["Python", "Pandas", "Matplotlib", "Javascript","HTML","CSS"],
     github: "https://github.com/gwyntangog/msl_analysis",
     image: `${import.meta.env.BASE_URL}/assets/thumbnails/msl_dashboard.png`,
     live: "https://gwyntangog.github.io/msl_analysis/",
-  },
-  {
-    title: "Portfolio Website",
-    description: "This website! I upgraded from my first website (which was made using a template), to one made from scratch.",
-    tech: ["HTML", "CSS", "Astro", "TypeScript", "Cloudflare", "Prompting"],
-    github: "https://github.com/gwyntangog/portfolio",
-    live: "https://gwyntangog.github.io/portfolio/",
   },
   {
     title: "Light Touch Support Program Analytics Dashboard",
@@ -68,19 +54,24 @@ export const projects: Project[] = [
     image: `${import.meta.env.BASE_URL}/assets/thumbnails/lits_dashboard.png`,
     live: "https://lits-analyst.onrender.com/"
   },
+];
+
+export const personalProjects: PersonalProject[] = [
+     {
+    title: "Pokemon Cards Expected Value Calculator",
+    description: "A dashboard that shows you the expected value you get from opening packs, how many packs you need to open to pull a card of a specific rarity, and how many packs you expect to open when chasing a card. I made this to discourage myself from the gambling side of pokemon.",
+    tech: ["Javascript", "HTML", "CSS", "API", "Fullstack","Frontend","Backend"],
+    github: "https://github.com/gwyntangog/ev_calc",
+    image: `${import.meta.env.BASE_URL}/assets/thumbnails/pokemon_ev_calc.png`,
+    live: "https://pokemon-ev-calculator.onrender.com/",
+    wip: "true",
+  },
   {
     title: "Journal Cooking",
     description: "Developed a recipe-sharing website in a team as part of the MIT Web Lab class. The process covered brain storming, mock-ups, and programming.",
     tech: ["JavaScript", "CSS", "React"],
     image: `${import.meta.env.BASE_URL}/assets/thumbnails/journal_cooking.png`,
     github: "https://github.com/weblab-class/Gyuu03-littlenotebook-airconbear",
-  },
-  {
-    title: "First Iteration - Personal Website",
-    description: "My first iteration of a personal website, using a bootstrap website.",
-    tech: ["HTML", "CSS", "JavaScript"],
-    image: `${import.meta.env.BASE_URL}/assets/thumbnails/first_personal.png`,
-    github: "https://github.com/gwyntangog/resume",
   },
 ];
 

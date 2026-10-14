@@ -1,9 +1,10 @@
 ---
-import { projects, teaching, research } from '../data/featured';
-import type { Project, TeachingSession, ResearchOutput } from '../data/featured';
+import { projects, teaching, research, personalProjects } from '../data/featured';
+import type { Project, TeachingSession, ResearchOutput, PersonalProject } from '../data/featured';
 
 const tabs = [
-  { id: 'projects',  label: 'Projects',  count: projects.length  },
+  { id: 'projects',  label: 'Professional Projects',  count: projects.length  },
+  { id: 'personalProjects',  label: 'Personal Projects',  count: personalProjects.length  },
   { id: 'teaching',  label: 'Teaching',  count: teaching.length  },
   { id: 'research',  label: 'Research',  count: research.length  },
 ];
@@ -32,6 +33,50 @@ const tabs = [
   <div class="tab-panel active" id="projects" role="tabpanel">
     <div class="cards-grid">
       {projects.map((project: Project) => (
+        <article class="card">
+             {project.image && (
+                <div class="card-image">
+                <img src={project.image} alt={project.title} loading="lazy" />
+                </div>
+            )}
+          <div class="card-top">
+            <h3 class="card-title">{project.title}</h3>
+            {project.live
+              ? <span class="badge badge--live">Live ↗</span>
+              : <span class="badge badge--repo">Repo only</span>
+            }
+          </div>
+          <p class="card-desc">{project.description}</p>
+          <div class="tag-row">
+            {project.tech.map((t: string) => <span class="tag">{t}</span>)}
+          </div>
+          <div class="status-row">
+            {project.wip
+              ? <span class="status status--wip"><span class="status-dot" />Work in Progress</span>
+              : <span class="status status--done">✓ Completed</span>
+            }
+          </div>
+          <div class="card-links">
+            {project.github && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn btn--ghost">
+                GitHub →
+              </a>
+            )}
+            {project.live && (
+              <a href={project.live} target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+                Live ↗
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <!-- Personal Projects Panel -->
+  <div class="tab-panel active" id="personalProjects" role="tabpanel">
+    <div class="cards-grid">
+      {personalProjects.map((project: PersonalProject) => (
         <article class="card">
              {project.image && (
                 <div class="card-image">
